@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sample.service.impl.FileMapper">
+	
+
+	<insert id="insertFile" parameterType="fileVO">
+	/* egovframework.example.sample.service.impl.FileMapper.insertFile */	
+	
+		INSERT INTO board_file
+			(   file_real_nm
+			    , file_nm
+			    , file_url_path
+			    , file_mapping_path
+			    , file_sttus
+			    , file_user_pk
+			    , file_rgsde
+			    , file_ext
+			    , file_size
+			    , board_pk )
+		  VALUES ( #{fileRealNm}
+				, #{fileNm}
+				, #{fileUrlPath}
+				, #{fileMappingPath}
+				, #{fileSttus}
+				, #{fileUserPk}
+				, NOW()
+				, #{fileExt}
+				, #{fileSize}
+				, #{boardPk})
+		  
+	</insert>
+	
+	<select id="selectFile" resultType="fileVO">
+	/* egovframework.example.sample.service.impl.FileMapper.selectFile */
+	
+		SELECT file_pk
+				, file_real_nm
+				, file_nm
+			    , file_url_path
+			    , file_mapping_path
+			    , board_pk
+	    FROM  board_file
+	    WHERE board_pk = #{boardPk}
+	    AND	file_sttus = '1'
+	    LIMIT 1
+	</select>
+	
+	<update id="deleteFile">
+		/* egovframework.example.sample.service.impl.FileMapper.deleteFile */
+	
+		DELETE FROM board_file
+		WHERE file_pk = #{filePk}
+			
+	</update>
+		
+	
+</mapper>

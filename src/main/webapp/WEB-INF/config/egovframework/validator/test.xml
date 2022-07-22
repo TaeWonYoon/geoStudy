@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+ 
+<form-validation>
+    <formset>
+        <form name="testVO">
+            <field property="name" depends="required, maxlength">
+                <arg0 key="test.a.name" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false" /> <!-- name이 maxlength 인 파라미터 추가 -->
+		        <var> <!-- resource 속성을 false로 하면 여기서 바로 값을 줄 수 있다 (true를 하면 meesage.props 사용) -->
+		            <var-name>maxlength</var-name>
+		            <var-value>5</var-value>
+        		</var>
+            </field>  
+            <field property="id" depends="required, maxlength">
+                <arg0 key="test.a.id" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false" /> <!-- name이 maxlength 인 파라미터 추가 -->
+		        <var> <!-- resource 속성을 false로 하면 여기서 바로 값을 줄 수 있다 (true를 하면 meesage.props 사용) -->
+		            <var-name>maxlength</var-name>
+		            <var-value>5</var-value>
+        		</var>
+            </field>      
+        </form>
+    </formset>
+ 
+</form-validation>

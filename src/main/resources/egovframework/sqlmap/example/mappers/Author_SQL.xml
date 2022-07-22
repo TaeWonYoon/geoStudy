@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sample.service.impl.AuthorMapper">
+
+	
+	<select id="authorCeck" parameterType="authorVO" resultType="int">
+	/* egovframework.example.sample.service.impl.AuthorMapper.authorCeck */
+	
+		SELECT 
+			 COUNT(*)
+		FROM tb_author
+		WHERE 
+			level = #{level}
+		AND
+			page_url = #{pageUrl}
+		AND
+			sttus = '1'
+			
+	</select>
+	
+</mapper>

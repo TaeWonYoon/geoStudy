@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.example.sample.service.wssimpl.MapMapper">
+
+	
+	<select id="mapList" resultType="hashMap" parameterType="mapVO">
+	/* egovframework.example.sample.service.wssimpl.MapMapper.mapList */
+	
+		SELECT 
+			a.station_id
+			, a.lat
+			, a.lon
+			, a.station_name
+			, a.station_address
+			, ad.tm
+			, ad.minta
+			, ad.maxta
+			, ad.avgta
+			, ad.avgrhm
+	 	FROM wss_asos AS a 
+		LEFT JOIN
+		(
+			SELECT 
+				ad. stnid
+				, ad.tm
+				, ad.minta
+				, ad.maxta
+				, ad.avgta
+				, ad.avgrhm
+				FROM (
+					SELECT stnid, MAX(seq) AS seq FROM wss_asos_data
+		  			GROUP BY stnid
+				) AS a 
+			LEFT JOIN wss_asos_data AS ad
+			ON a.seq = ad.seq
+		) AS ad
+		ON a.station_id = ad.stnid
+		WHERE a.end_date IS NUll
+			
+	</select>
+	<select id="awsList" resultType="hashMap" parameterType="mapVO">
+	/* egovframework.example.sample.service.wssimpl.MapMapper.mapList */
+	
+		SELECT 
+			a.obsr_spot_code
+			, a.obsr_spot_nm
+			, a.instl_la
+			, a.instl_lo
+			, ad.obsr_spot_nm
+			, ad.date_time
+			, ad.tmprt_150top
+			, ad.tmprt_150lwet 
+			FROM
+			(
+				SELECT ad.obsr_spot_code, ad.obsr_spot_nm,ad.date_time, ad.tmprt_150top, ad.tmprt_150lwet FROM 
+				(
+					SELECT obsr_spot_code, MAX(seq) AS seq
+					FROM wss_aws_data
+					GROUP BY
+					obsr_spot_code
+				) AS a
+				LEFT JOIN
+					wss_aws_data AS ad
+				ON
+					a.seq = ad.seq
+			) AS ad
+			LEFT JOIN 
+				wss_aws AS a
+			ON
+				a.obsr_spot_code = ad.obsr_spot_code
+			
+	</select>
+	
+</mapper>

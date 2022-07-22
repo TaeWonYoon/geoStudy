@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sample.service.wssimpl.CrawlingMapper">
+
+	<select id="tntCrawlingList" resultType="hashMap" parameterType="cmmnVO">
+	/* egovframework.example.sample.service.wssimpl.CrawlingMapper.tntCrawlingList */
+		
+		SELECT 
+			COUNT(news_nsprc) AS data_val
+			<if test="total == 'all'">
+				,	TO_CHAR(news_rgsde,'YYYY') AS label_val	
+			</if>
+			<if test="total != 'all'">
+				<choose>
+					<when test="(year != '' and year != null) and (month == '' or month == null)">
+					,	TO_CHAR(news_rgsde,'MM') AS label_val
+					</when>
+					<when test="(year != '' and year != null) and (month != '' and month != null)">
+					,	TO_CHAR(news_rgsde,'DD') AS label_val
+					</when>
+					<otherwise>
+					,	TO_CHAR(news_rgsde,'MM-DD') AS label_val
+					</otherwise>
+				</choose>		 
+			</if>
+		FROM wss_news_colct
+		<if test="total != 'all'">
+			WHERE
+			<choose>
+				<when test="(year != '' and year != null) and (month == '' or month == null)">
+					TO_CHAR(news_rgsde,'YYYY') = #{startDate}
+				</when>
+				<when test="(year != '' and year != null) and (month != '' and month != null)">
+					TO_CHAR(news_rgsde,'YYYY-MM') = #{startDate}
+				</when>
+				<otherwise>
+					TO_CHAR(news_rgsde,'YYYY-MM-DD') >= #{startDate}
+				AND
+					TO_CHAR(news_rgsde,'YYYY-MM-DD') <![CDATA[<=]]> #{endDate}
+				</otherwise>
+			</choose>		 
+		</if>
+		GROUP BY
+			label_val
+		ORDER BY
+			label_val ASC
+		
+	</select>
+
+	
+	<select id="crawlingList" resultType="hashMap" parameterType="crawlingVO">
+	/* egovframework.example.sample.service.wssimpl.CrawlingMapper.crawlingList */
+		
+		SELECT 
+			news_nsprc AS label_val
+			, COUNT(news_nsprc) AS data_val
+		FROM wss_news_colct
+		<where>
+			<if test="type.equals('year')">
+				EXTRACT(YEAR FROM news_rgsde) = EXTRACT(YEAR FROM NOW())
+			</if>
+			<if test="type.equals('month')">
+				TO_CHAR(news_rgsde,'YYYY-MM') = #{calendar}
+			</if>
+			<if test="type.equals('day')">
+				date(news_rgsde) = DATE(#{calendar})
+			</if>
+		</where>
+		GROUP BY
+			news_nsprc
+		ORDER BY
+			news_nsprc ASC
+			
+	</select>
+	
+	<select id="crawling" resultType="hashMap" parameterType="crawlingVO">
+	/* egovframework.example.sample.service.wssimpl.CrawlingMapper.crawling */
+		
+		SELECT
+			<if test="type.equals('year')"> 
+				EXTRACT(YEAR FROM news_rgsde) AS label_val,
+			</if>
+			<if test="type.equals('month')">
+				TO_CHAR(news_rgsde,'YYYY-MM') AS label_val,
+			</if> 
+			<if test="type.equals('day')">
+				TO_CHAR(news_rgsde,'YYYY-MM-DD') AS label_val,
+			</if> 
+			COUNT(*) AS data_val
+		FROM wss_news_colct
+		WHERE 1=1
+			<if test="type != '' and type != null ">
+				GROUP BY 
+					label_val
+			</if>
+			<if test="type != '' and type != null ">
+				ORDER BY
+					label_val ASC
+			</if>
+			LIMIT 100
+	</select>
+	
+</mapper>

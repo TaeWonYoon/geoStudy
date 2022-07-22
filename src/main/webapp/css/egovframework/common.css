@@ -1,0 +1,179 @@
+@CHARSET "UTF-8";
+
+* {
+	padding: 0;
+	margin: 0;
+}
+
+header {
+	background: #413e3e;
+	width: 100%;
+	height: 80px;
+}
+
+.logo {
+	float: left;
+	margin-left: 40px;
+	margin-top: 20px;
+	color: rgb(230, 211, 211);
+}
+
+.user {
+	margin-top: 20px;
+	margin-right: 20px;
+	float: right;
+	color: rgb(230, 211, 211);
+}
+
+section {
+	display: flex;
+}
+
+.nav {
+	background: #413e3e;
+	height: 1000px;
+	flex: 1;
+}
+
+.article {
+	background: #f8f8f8;
+	flex: 10;
+}
+
+.li_style>li {
+	border: 1px solid;
+	list-style: none;
+	padding: 13px;
+}
+
+.li_style>li>a {
+	text-decoration: none;
+	margin-bottom: 3px;
+	color: rgb(247, 229, 229);
+}
+
+.contents {
+	width: 1400px;
+	margin: 0 auto;
+	margin-top: 5%;
+}
+
+.nav_list {
+	margin-top: 2%;
+	display: none;
+}
+
+.nav_list li {
+	background-color: rgb(255, 255, 255);
+	border: 1px solid;
+	color: black;
+	border-radius: 7px;
+	font-size: 14px;
+	padding: 6px;
+	list-style: none;
+	font-weight: 500;
+}
+
+.nav_list li:hover {
+        background-color: rgb(182, 181, 194);
+}
+.page_chk {
+    background-color: rgb(182, 181, 194);
+}
+
+.nav_list>li>a {
+	text-decoration: none;
+	color: black;
+	font-weight: 600
+}
+
+.contents_logo {
+	text-align: center;
+}
+
+.input_form {
+	width: 500px;
+	height: 30px;
+	border-radius: 8px;
+	border: 1px solid #c54b4b;
+}
+
+table {
+	border-spacing: 10px 20px;
+}
+
+.btn-green {
+	color: rgb(238, 228, 228);
+	width: 100px;
+	height: 35px;
+	border: 1px solid #63dd63;
+	background-color: #63dd63;
+	border-radius: 6px;
+	font-weight: 700;
+}
+
+.btn-green:hover {
+	background-color: #43e743;
+	font-weight: 900;
+}
+
+.btn-primary {
+	color: rgb(238, 228, 228);
+	width: 100px;
+	height: 35px;
+	border: 1px solid #5676e0;
+	background-color: #5676e0;
+	border-radius: 6px;
+	font-weight: 700;
+}
+
+.btn-primary:hover {
+	border: 3px solid #5676e0;
+	background-color: #3e65e6;
+	font-weight: 900;
+}
+
+.th_css {
+        height: 40px;
+    }
+    
+.tb_css {
+    border: 1px solid #eee;
+    background: #ffffff;
+    width: 1400px;
+    border-collapse: collapse;
+    border-radius: 4px;
+}
+
+.tb_css td {
+    border: 1px solid #eee;
+    height: 25px;
+    background: #ffffff;
+    text-align: center;
+}
+
+.page_name {
+    
+    text-align: center;
+    margin-bottom: 3%;
+}
+
+.page_search {
+    margin-bottom: 3%;
+}
+.paging {
+	margin-top: 15px;
+	text-align: center;
+}
+.paging a{
+	margin-right: 6px;
+	padding: 5px;
+	border: 1px solid #ccffff;
+	text-decoration: none;
+	background: #ffffff;
+	color: #000000;
+	font-weight: 700;
+}
+.on {
+	background: #b3ffff !important;
+}

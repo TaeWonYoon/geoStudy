@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.example.sample.service.wssimpl.AsosMapper">
+
+	<select id="tntAsosList" resultType="hashMap" parameterType="cmmnVO">
+	/* egovframework.example.sample.service.wssimpl.AsosMapper.tntAsosList */
+			
+		SELECT 
+			 COUNT(*) AS data_val
+			 <if test="total == 'all'">
+			 ,	SUBSTRING(tm,1,4) AS label_val
+			 </if>
+			 <if test="total != 'all'"> 
+				 <choose>
+					<when test="(year != '' and year != null) and (month == '' or month == null)">
+					,	SUBSTRING(tm,6,2) AS label_val
+					</when>
+					<when test="(year != '' and year != null) and (month != '' and month != null)">
+					,	SUBSTRING(tm,9,2) AS label_val
+					</when>
+					<otherwise>
+					,	SUBSTRING(tm,6,5) AS label_val
+					</otherwise>
+				 </choose>	
+			 </if>
+		FROM wss_asos_data 
+		<if test="total != 'all'">
+			WHERE
+				<choose>
+					<when test="(year != '' and year != null) and (month == '' or month == null)">
+						SUBSTRING(tm,1,4) = #{startDate}
+					</when>
+					<when test="(year != '' and year != null) and (month != '' and month != null)">
+						SUBSTRING(tm,1,7) = #{startDate}
+					</when>
+					<otherwise>
+						tm >= #{startDate}
+					AND
+						tm <![CDATA[<=]]>  #{endDate}
+					</otherwise>
+				</choose>
+			</if>
+		GROUP BY
+			label_val
+		ORDER BY
+			label_val ASC
+		
+	</select>
+	
+</mapper>

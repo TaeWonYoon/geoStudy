@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sample.service.impl.UserMapper">
+
+	
+	<select id="idCeck" resultType="int">
+	/* egovframework.example.sample.service.impl.UserMapper.idCeck */
+	
+		SELECT 
+			 count(id) 
+		FROM tb_user
+		WHERE
+			sttus = '1'
+		AND
+			id = #{id}
+			
+	</select>
+	
+	<insert id="regist" parameterType="userVO">
+	/* egovframework.example.sample.service.impl.UserMapper.regist */
+	
+		INSERT INTO tb_user
+			( nm
+			  ,	id
+			  , password
+			  , rgsde
+			  , sttus
+			  , level )
+		VALUES ( #{nm}
+		  	  , #{id}
+		  	  , #{password}
+		  	  , NOW()
+		  	  , #{sttus} 
+		  	  , #{level} )
+		  	  
+	</insert>
+	
+	<select id="login" resultType="userVO">
+	/* egovframework.example.sample.service.impl.UserMapper.login */
+	
+		SELECT
+			pk
+			, nm
+			, id
+			, password
+			, level
+		FROM tb_user
+		WHERE sttus = '1'
+		AND id = #{id}
+		
+	</select>
+	
+	<select id="userInfo" parameterType="hashMap" resultType="userVO">
+	/* egovframework.example.sample.service.impl.UserMapper.userInfo */
+	
+		SELECT 
+			nm
+			, id 
+		FROM tb_user
+		WHERE pk = #{pk}
+		AND sttus = '1'
+		
+	</select>
+	
+	<update id="userUpdt" parameterType="userVO" >
+	/* egovframework.example.sample.service.impl.UserMapper.userUpdt */
+	
+		UPDATE tb_user 
+		SET nm = #{nm}
+		<if test="password != null and (!password.equals(''))">
+			, password = #{password}
+		</if>
+		WHERE pk = #{pk}
+		AND sttus = '1'
+		
+	</update>
+	
+	<select id="userList" parameterType="hashMap" resultType="userVO">
+	/* egovframework.example.sample.service.impl.UserMapper.userList */
+	
+		SELECT
+			pk
+			, nm
+			, id
+			, level
+			, rgsde
+			, sttus
+		FROM tb_user
+		WHERE sttus IN('0','1')
+		<if test="levelType != '' and levelType != null ">
+			AND level = #{levelType}
+		</if>
+		<if test="searchType == 'id'">
+			AND	id LIKE CONCAT('%', #{keyword}, '%')  
+		</if>
+		<if test="searchType == 'nm'">
+			AND	nm LIKE CONCAT('%', #{keyword}, '%')  
+		</if>
+		<if test="startDate != '' and startDate != null ">
+            AND DATE(rgsde) >= DATE(#{startDate})
+        </if>
+        <if test="finishDate != '' and finishDate != null ">
+            AND DATE(rgsde) <![CDATA[<=]]> DATE(#{finishDate})
+        </if>
+        	AND sttus = '1'
+		ORDER BY
+			sttus ASC, pk DESC
+		LIMIT
+			#{postNum} OFFSET #{displayPost}
+						
+	</select>
+	
+	<select id="userTotCnt" parameterType="hashMap" resultType="int">
+	/* egovframework.example.sample.service.impl.UserMapper.userList */
+	
+		SELECT
+			count(*)
+		FROM tb_user
+		WHERE sttus IN('0','1')
+		<if test="levelType != '' and levelType != null ">
+			AND level = #{levelType}
+		</if>
+		<if test="searchType == 'id'">
+			AND	id LIKE CONCAT('%', #{keyword}, '%')  
+		</if>
+		<if test="searchType == 'nm'">
+			AND	nm LIKE CONCAT('%', #{keyword}, '%')  
+		</if>
+		<if test="startDate != '' and startDate != null ">
+            AND DATE(rgsde) >= DATE(#{startDate})
+        </if>
+        <if test="finishDate != '' and finishDate != null ">
+            AND DATE(rgsde) <![CDATA[<=]]> DATE(#{finishDate})
+        </if>
+			
+	</select>
+	
+	<update id="userSttus" parameterType="userVO">
+	/* egovframework.example.sample.service.impl.UserMapper.userConfm */
+	
+		UPDATE tb_user 
+		SET sttus = #{sttus}
+			, confm_pk = #{confmPk}
+		WHERE
+			pk = #{pk}
+	
+	</update>
+	
+	<update id="userLevel" parameterType="userVO">
+	/* egovframework.example.sample.service.impl.UserMapper.userConfm */
+	
+		UPDATE tb_user 
+		SET level = #{level}
+			, confm_pk = #{confmPk}
+		WHERE
+			pk = #{pk}
+	
+	</update>
+	
+	<select id="userMap" parameterType="hashmap" resultType="hashmap">
+	/* egovframework.example.sample.service.impl.UserMapper.userMap */
+	
+		SELECT 
+			nm
+			, id 
+		FROM tb_user
+		WHERE pk = #{pk}  
+		AND sttus = '1'
+	
+	</select>
+	
+	
+	
+</mapper>

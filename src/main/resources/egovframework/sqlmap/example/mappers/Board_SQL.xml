@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sample.service.impl.BoardMapper">
+
+	
+	<select id="boardList" parameterType="hashmap" resultType="boardVO">
+	/* egovframework.example.sample.service.impl.BoardMapper.boardList */
+	
+		SELECT 
+			 b.pk
+			 ,	b.sj
+			 ,	b.cn
+			 ,	b.user_pk
+			 ,	b.sttus
+			 ,	b.rgsde
+			 ,	b.updde
+			 ,	u.nm
+		FROM tb_board AS b
+		LEFT JOIN
+			tb_user AS u 
+		ON
+			u.pk = b.user_pk  
+		WHERE b.sttus = '1'
+		AND
+			b.ty = #{ty}
+		<choose>
+		    <when test="searchType.equals('alls')">
+				AND	
+					(
+						b.sj LIKE CONCAT('%', #{searchKeyword}, '%')
+					OR
+						b.cn LIKE CONCAT('%', #{searchKeyword}, '%')
+					OR
+						u.nm LIKE CONCAT('%', #{searchKeyword}, '%')
+					)
+		    </when>
+		    <when test="searchType.equals('sj')">
+				AND	b.sj LIKE CONCAT('%', #{searchKeyword}, '%')     
+		    </when>
+		    <when test="searchType.equals('cn')">
+				AND	b.cn LIKE CONCAT('%', #{searchKeyword}, '%')     
+		    </when>
+		    <when test="searchType.equals('nm')">
+				AND	u.nm LIKE CONCAT('%', #{searchKeyword}, '%')     
+		    </when>
+		</choose>
+		ORDER BY 
+			b.pk DESC
+		LIMIT
+			#{postNum} OFFSET #{displayPost}
+			
+	</select>
+	
+	<select id="boardTotCnt" parameterType="hashmap" resultType="int">
+	/* egovframework.example.sample.service.impl.BoardMapper.boardTotCnt */
+	
+		SELECT 
+			 COUNT(*)
+		FROM tb_board AS b
+		LEFT JOIN
+			tb_user AS u 
+		ON
+			u.pk = b.user_pk  
+		WHERE b.sttus = '1'
+		AND
+			b.ty = #{ty}
+		<choose>
+		    <when test="searchType.equals('alls')">
+				AND	
+					(
+						b.sj LIKE CONCAT('%', #{searchKeyword}, '%')
+					OR
+						b.cn LIKE CONCAT('%', #{searchKeyword}, '%')
+					OR
+						u.nm LIKE CONCAT('%', #{searchKeyword}, '%')
+					)
+		    </when>
+		    <when test="searchType.equals('sj')">
+				AND	b.sj LIKE CONCAT('%', #{searchKeyword}, '%')     
+		    </when>
+		    <when test="searchType.equals('cn')">
+				AND	b.cn LIKE CONCAT('%', #{searchKeyword}, '%')     
+		    </when>
+		    <when test="searchType.equals('nm')">
+				AND	u.nm LIKE CONCAT('%', #{searchKeyword}, '%')     
+		    </when>
+		</choose>
+			
+	</select>
+	
+	<select id="selectBoard" resultType="boardVO">
+	/* egovframework.example.sample.service.impl.BoardMapper.selectBoard */
+	
+		SELECT 
+			 b.pk
+			 ,	b.sj
+			 ,	b.cn
+			 ,	b.user_pk
+			 ,	b.sttus
+			 ,	b.rgsde
+			 ,	b.updde
+			 ,  u.nm
+		FROM tb_board AS b
+		LEFT JOIN
+			tb_user AS u 
+		ON
+			u.pk = b.user_pk
+		WHERE b.pk = #{pk}
+		 AND  b.sttus = '1'
+	</select>
+	
+	<insert id="inserBoard" parameterType="boardVO"  useGeneratedKeys="true" keyProperty="pk">
+	/* egovframework.example.sample.service.impl.BoardMapper.insertBoard */
+		
+		INSERT INTO tb_board
+			( sj
+			  ,	cn
+			  , user_pk
+			  , sttus
+			  , rgsde
+			  , ty )
+	  	VALUES ( #{sj}
+	  		  ,	#{cn}
+	  		  , #{userPk}
+	  		  , '1'
+	  		  , NOW() 
+	  		  , #{ty}
+	  		)
+	  		
+	</insert>
+	
+	<update id="updateBoard" parameterType="boardVO">
+		/* egovframework.example.sample.service.impl.BoardMapper.updateBoard */
+		
+		UPDATE tb_board
+		SET sj = #{sj}
+			, cn = #{cn}
+			, updde = NOW()
+			, user_pk = #{userPk}
+		WHERE pk = #{pk}	
+		AND 
+			sttus = '1'
+	
+	</update>
+	
+	<update id="deleteBoard" parameterType="boardVO">
+		/* egovframework.example.sample.service.impl.BoardMapper.updateBoard */
+		
+		UPDATE tb_board
+		SET sttus = '0', user_pk = #{userPk} 
+		WHERE pk = #{pk}	
+		AND sttus = '1'
+	
+	</update>
+	
+	
+</mapper>

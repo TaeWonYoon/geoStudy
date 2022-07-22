@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sample.service.impl.AnswerMapper">
+
+	
+	<insert id="insertAnswer" parameterType="answerVO">
+	/* egovframework.example.sample.service.impl.AnswerMapper.insertAnswer */
+	
+		INSERT INTO tb_answer
+			( cn
+			  , user_pk
+			  , rgsde
+			  , sttus
+			  , board_pk )
+	   	VALUES ( #{cn}
+	   		  , #{userPk}
+	   		  ,	NOW()
+	   		  , #{sttus}
+	   		  , #{boardPk} )
+	   		  
+	</insert>
+	
+	<select id="answerList" parameterType="hashmap" resultType="answerVO" >
+	/* egovframework.example.sample.service.impl.AnswerMapper.answerList */
+	
+		SELECT 
+			 a.pk
+			 , a.cn
+			 , a.user_pk
+			 , a.rgsde
+			 , a.sttus
+			 , a.board_pk
+			 , u.nm
+		 FROM tb_answer AS a
+		 LEFT JOIN
+		 	  tb_user AS u
+ 	  	 ON a.user_pk = u.pk
+		 WHERE a.sttus = '1'
+		 AND a.board_pk = #{boardPk}
+	 	ORDER BY 
+			a.pk DESC
+		LIMIT
+			#{postNum} OFFSET #{displayPost}
+	</select>
+	
+	<select id="answerTotCnt" parameterType="hashmap" resultType="int" >
+	/* egovframework.example.sample.service.impl.AnswerMapper.answerTotCnt */
+	
+		SELECT 
+			 count(*)
+		 FROM tb_answer AS a
+		 LEFT JOIN
+		 	  tb_user AS u
+ 	  	 ON a.user_pk = u.pk
+		 WHERE a.sttus = '1'
+		 AND a.board_pk = #{boardPk}
+		 
+	</select>
+	
+	<update id="deleteAnswer" parameterType="answerVO">
+	/* egovframework.example.sample.service.impl.AnswerMapper.deleteAnswer */
+	
+		UPDATE tb_answer
+		SET	sttus = '0'
+		WHERE pk = #{pk}
+		AND sttus = '1'
+			
+	</update>
+	
+	<insert id="insertReplyAnswer" parameterType="answerVO">
+	/* egovframework.example.sample.service.impl.AnswerMapper.insertReplyAnswer */
+	
+		INSERT INTO tb_answer
+			( cn
+			  , user_pk
+			  , rgsde
+			  , sttus
+			  , depth_pk
+			  , depth )
+	   	VALUES ( #{cn}
+	   		  , #{userPk}
+	   		  ,	NOW()
+	   		  , #{sttus}
+	   		  , #{depthPk}
+	   		  , #{depth} )
+	   		  
+	</insert>
+	
+	<select id="answerReplyList" parameterType="hashmap" resultType="answerVO" >
+	/* egovframework.example.sample.service.impl.AnswerMapper.answerReplyList */
+	
+		SELECT 
+			 a.pk
+			 , a.cn
+			 , a.user_pk
+			 , a.rgsde
+			 , a.sttus
+			 , a.board_pk
+			 , a.depth
+			 , u.nm
+		 FROM tb_answer AS a
+		 LEFT JOIN
+		 	  tb_user AS u
+ 	  	 ON a.user_pk = u.pk
+		 WHERE a.sttus = '1'
+		 AND a.depth_pk = #{depthPk}
+		 AND a.depth = #{depth}
+	 	ORDER BY 
+			a.pk DESC
+			
+	</select>
+	
+</mapper>

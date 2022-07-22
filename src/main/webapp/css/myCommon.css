@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+.lf_tx {
+	font-weight: bold;
+}
+
+.t_d { /*  텍스트 밑줄 없애기 */
+	text-decoration: none;
+}
